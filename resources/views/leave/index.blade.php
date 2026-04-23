@@ -2,8 +2,8 @@
     {{-- Page Top --}}
     <div class="flex items-start justify-between mb-5">
         <div>
-            <h1 class="text-[17px] font-semibold text-gray-900">Permissions</h1>
-            <p class="text-[12px] text-gray-400 mt-0.5">Manage user roles and their Permissions</p>
+            <h1 class="text-[17px] font-semibold text-gray-900">Leave</h1>
+            <p class="text-[12px] text-gray-400 mt-0.5">Leave management</p>
 
             {{-- Success Message --}}
             @if(session('success'))
@@ -14,25 +14,23 @@
             @endif
 
             {{-- Error Message --}}
-            @if($errors->any())
+            @if(session('error'))
                 <div class="mb-3 px-4 py-2 bg-red-100 text-red-700 text-[12.5px] rounded-lg border border-red-200">
-                    <ul class="list-disc pl-5">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+                    {{ session('error') }}
                 </div>
             @endif
 
         </div>
+        @can('apply_leave_btn')
         <a href="{{ route('leave.create') }}"
            class="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white
                   text-[12.5px] font-semibold px-4 py-2 rounded-lg transition">
             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 14 14">
                 <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            New Leaves
+            New Leave
         </a>
+        @endcan
     </div>
 
     {{-- Table Card --}}
@@ -76,9 +74,11 @@
                 <th class="text-left px-5 py-2.5 text-[10.5px] font-semibold uppercase tracking-[0.07em] text-gray-300">
                     Approval
                 </th>
+                @can('leave_approval_btn')
                 <th class="text-left px-5 py-2.5 text-[10.5px] font-semibold uppercase tracking-[0.07em] text-gray-300">
                     Action
                 </th>
+                @endcan
             </tr>
             </thead>
             <tbody>
@@ -134,6 +134,7 @@
                     </td>
                     {{-- Actions --}}
                     <td class="px-5 py-3.5">
+                        @can('leave_approval_btn')
                         <div class="flex items-center gap-1">
                             <a href="{{ route('leave.edit',$leave->id) }}"
                                class="w-7 h-7 rounded-lg border border-black/10 flex items-center justify-center
@@ -168,7 +169,7 @@
                                 </svg>
 
                             </a>
-                            @can('leave_approval_btn')
+
                             <div class="flex items-center gap-2">
 
                                 {{-- Approve Button --}}
@@ -201,8 +202,9 @@
                                 </form>
 
                             </div>
-                            @endcan
+
                         </div>
+                        @endcan
                     </td>
 
                 </tr>

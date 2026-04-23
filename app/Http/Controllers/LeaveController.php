@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Administration;
 use App\Models\Leave;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
@@ -53,8 +55,8 @@ class LeaveController extends Controller
             'form_date' => $request->form_date,
             'to_date' => $request->to_date,
             'leave_type' => $request->leave_type,
-            'attachment' => $attachmentPath,
-            'status' => null,
+            'attachment' => $attachmentPath ?? null,
+            'status' => 'pending',
             'approved_at' => null,
         ]);
 
@@ -108,6 +110,10 @@ class LeaveController extends Controller
             $attachmentPath = $request->file('attachment')->store('image');
         }
 
+
+
+
+
         // update data
         $leave->update([
             'form_date' => $request->form_date,
@@ -133,6 +139,32 @@ class LeaveController extends Controller
 
     public function approve(Leave $leave)
     {
+        $admin = Administration::first();
+
+        $userId = $leave->user_id;
+
+        $sickCount = DB::table('leaves')
+            ->where('user_id', $userId)
+            ->where('leave_type', 'sick')
+            ->where('status', 'approved')
+            ->count();
+
+        $casualCount = DB::table('leaves')
+            ->where('user_id', $userId)
+            ->where('leave_type', 'casual')
+            ->where('status', 'approved')
+            ->count();
+
+        // Sick leave check
+        if ($leave->leave_type === 'sick' && $sickCount >= $admin->sick) {
+            return back()->with('error', 'Sorry, you are not eligible to take more sick leave!');
+        }
+
+        // Casual leave check
+        if ($leave->leave_type === 'casual' && $casualCount >= $admin->casual) {
+            return back()->with('error', 'Sorry, you are not eligible to take more casual leave!');
+        }
+
         $leave->update([
             'status' => 'approved',
             'approved_at' => now(),

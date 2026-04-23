@@ -90,7 +90,7 @@
                     </svg>
                     Users
                 </a>
-            <?php endif; ?>
+
 
             <a href="<?php echo e(route('roles.index')); ?>"
                class="sb-item <?php echo e(request()->routeIs('roles.*') ? 'active' : ''); ?>">
@@ -99,7 +99,7 @@
                 </svg>
                 Roles
             </a>
-
+            <?php endif; ?>
             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('admin_nav')): ?>
                 <a href="<?php echo e(route('permissions.create')); ?>"
                    class="sb-item <?php echo e(request()->routeIs('permissions.*') ? 'active' : ''); ?>">
@@ -134,12 +134,9 @@
                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('nav_nav_administration')): ?>
                         <a href="<?php echo e(route('administrations.index')); ?>"
                            class="sb-item sm-item <?php echo e(request()->routeIs('administrations.*') ? 'active' : ''); ?>">
-                            Admin
+                            <?php echo e(auth()->user()->roles->pluck('name')->join(', ')); ?>
+
                         </a>
-                    <?php endif; ?>
-                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('nav_administration')): ?>
-                        <a href="#" class="sb-item sm-item">HR</a>
-                        <a href="#" class="sb-item sm-item">Employee</a>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>

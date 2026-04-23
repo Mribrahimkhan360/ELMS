@@ -90,7 +90,7 @@
                     </svg>
                     Users
                 </a>
-            @endcan
+
 
             <a href="{{ route('roles.index') }}"
                class="sb-item {{ request()->routeIs('roles.*') ? 'active' : '' }}">
@@ -99,7 +99,7 @@
                 </svg>
                 Roles
             </a>
-
+            @endcan
             @can('admin_nav')
                 <a href="{{ route('permissions.create') }}"
                    class="sb-item {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
@@ -134,12 +134,8 @@
                     @can('nav_nav_administration')
                         <a href="{{ route('administrations.index') }}"
                            class="sb-item sm-item {{ request()->routeIs('administrations.*') ? 'active' : '' }}">
-                            Admin
+                            {{ auth()->user()->roles->pluck('name')->join(', ') }}
                         </a>
-                    @endcan
-                    @can('nav_administration')
-                        <a href="#" class="sb-item sm-item">HR</a>
-                        <a href="#" class="sb-item sm-item">Employee</a>
                     @endcan
                 </div>
             @endcan

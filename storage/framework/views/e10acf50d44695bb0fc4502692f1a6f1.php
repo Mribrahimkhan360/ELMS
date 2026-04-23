@@ -1,32 +1,42 @@
-<x-app-layout>
-    {{-- Page Top --}}
+<?php if (isset($component)) { $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54 = $attributes; } ?>
+<?php $component = App\View\Components\AppLayout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('app-layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\AppLayout::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+    
     <div class="flex items-start justify-between mb-5">
         <div>
             <h1 class="text-[17px] font-semibold text-gray-900">Admin</h1>
             <p class="text-[12px] text-gray-400 mt-0.5">This information will be considered annually for all users.</p>
 
-            {{-- Success Message --}}
-            @if(session('success'))
+            
+            <?php if(session('success')): ?>
                 <div
                     class="mb-3 px-4 py-2 bg-green-100 text-green-700 text-[12.5px] rounded-lg border border-green-200">
-                    {{ session('success') }}
-                </div>
-            @endif
+                    <?php echo e(session('success')); ?>
 
-            {{-- Error Message --}}
-            @if($errors->any())
+                </div>
+            <?php endif; ?>
+
+            
+            <?php if($errors->any()): ?>
                 <div class="mb-3 px-4 py-2 bg-red-100 text-red-700 text-[12.5px] rounded-lg border border-red-200">
                     <ul class="list-disc pl-5">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
+                        <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <li><?php echo e($error); ?></li>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </ul>
                 </div>
-            @endif
+            <?php endif; ?>
 
         </div>
-        @can('create_annually_leave_btn')
-        <a href="{{ route('administrations.create') }}"
+        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('create_annually_leave_btn')): ?>
+        <a href="<?php echo e(route('administrations.create')); ?>"
            class="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white
                   text-[12.5px] font-semibold px-4 py-2 rounded-lg transition">
             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 14 14">
@@ -34,12 +44,12 @@
             </svg>
             Create Annually Leave
         </a>
-        @endcan
+        <?php endif; ?>
     </div>
 
-    {{-- Table Card --}}
+    
     <div class="bg-white rounded-xl border border-black/[0.08] overflow-hidden">
-        {{-- Card Header --}}
+        
         <div class="flex items-center justify-between px-5 py-3.5 border-b border-black/[0.07]">
             <span class="text-[13px] font-semibold text-gray-900">Total Leave</span>
             <div class="relative">
@@ -55,7 +65,7 @@
             </div>
         </div>
 
-        {{-- Table --}}
+        
         <table class="w-full border-collapse">
             <thead>
             <tr class="border-b border-black/[0.07]">
@@ -71,29 +81,31 @@
                 <th class="text-left px-5 py-2.5 text-[10.5px] font-semibold uppercase tracking-[0.07em] text-gray-300">
                     Created
                 </th>
-                @can('configure_action_button')
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('configure_action_button')): ?>
                 <th class="text-left px-5 py-2.5 text-[10.5px] font-semibold uppercase tracking-[0.07em] text-gray-300">
                     Action
                 </th>
-                @endcan
+                <?php endif; ?>
             </tr>
             </thead>
             <tbody>
-            @foreach($administrations as $administration)
+            <?php $__currentLoopData = $administrations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $administration): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr class="border-b border-black/[0.05] hover:bg-gray-50/60 transition last:border-0">
-                    {{-- ID --}}
+                    
                     <td class="px-5 py-3.5">
                         <div class="flex items-center gap-2.5">
                             <span class="text-[13px] font-semibold text-gray-900">
-                            {{ $loop->iteration }}
+                            <?php echo e($loop->iteration); ?>
+
                         </span>
                         </div>
                     </td>
-                    {{-- Administration Name --}}
+                    
                     <td class="px-5 py-3.5">
                         <div class="flex items-center gap-2.5">
                             <span class="text-[13px] font-semibold text-gray-900">
-                            {{ $administration->sick ?? ''}}
+                            <?php echo e($administration->sick ?? ''); ?>
+
                         </span>
                         </div>
                     </td>
@@ -101,24 +113,26 @@
                     <td class="px-5 py-3.5">
                         <div class="flex items-center gap-2.5">
                             <span class="text-[13px] font-semibold text-gray-900">
-                            {{ $administration->casual ?? ''}}
+                            <?php echo e($administration->casual ?? ''); ?>
+
                         </span>
                         </div>
                     </td>
 
-                    {{-- created --}}
+                    
                     <td class="px-5 py-3.5">
                         <div class="flex items-center gap-2.5">
                             <span class="text-[13px] font-semibold text-gray-900">
-                            {{ $administration->created_at ?? ''}}
+                            <?php echo e($administration->created_at ?? ''); ?>
+
                         </span>
                         </div>
                     </td>
-                    {{-- Actions --}}
-                    @can('configure_action_button')
+                    
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('configure_action_button')): ?>
                     <td class="px-5 py-3.5">
                         <div class="flex items-center gap-1">
-                            <a href="{{ route('administrations.edit',$administration->id) }}"
+                            <a href="<?php echo e(route('administrations.edit',$administration->id)); ?>"
                                class="w-7 h-7 rounded-lg border border-black/10 flex items-center justify-center
                                           text-gray-400 hover:bg-gray-100 transition">
                                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 16 16">
@@ -126,11 +140,11 @@
                                           stroke-linejoin="round"/>
                                 </svg>
                             </a>
-                            <form method="POST" action="{{ route('administrations.destroy', $administration->id) }}"
+                            <form method="POST" action="<?php echo e(route('administrations.destroy', $administration->id)); ?>"
                                   onsubmit="return confirm('Do you delete this role?')"
                             >
-                                @csrf
-                                @method('DELETE')
+                                <?php echo csrf_field(); ?>
+                                <?php echo method_field('DELETE'); ?>
                                 <button type="submit" class="w-7 h-7 rounded-lg border border-black/10 flex items-center justify-center
                                     text-gray-400 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition">
                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 16 16">
@@ -141,11 +155,21 @@
                             </form>
                         </div>
                     </td>
-                    @endcan
+                    <?php endif; ?>
                 </tr>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             </tbody>
         </table>
     </div>
-</x-app-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
+<?php $attributes = $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
+<?php unset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
+<?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
+<?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
+<?php endif; ?>
+<?php /**PATH C:\xampp\htdocs\ELMS\resources\views/administrations/index.blade.php ENDPATH**/ ?>

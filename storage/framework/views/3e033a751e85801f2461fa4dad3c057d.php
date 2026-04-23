@@ -11,8 +11,8 @@
     
     <div class="flex items-start justify-between mb-5">
         <div>
-            <h1 class="text-[17px] font-semibold text-gray-900">Permissions</h1>
-            <p class="text-[12px] text-gray-400 mt-0.5">Manage user roles and their Permissions</p>
+            <h1 class="text-[17px] font-semibold text-gray-900">Leave</h1>
+            <p class="text-[12px] text-gray-400 mt-0.5">Leave management</p>
 
             
             <?php if(session('success')): ?>
@@ -24,25 +24,24 @@
             <?php endif; ?>
 
             
-            <?php if($errors->any()): ?>
+            <?php if(session('error')): ?>
                 <div class="mb-3 px-4 py-2 bg-red-100 text-red-700 text-[12.5px] rounded-lg border border-red-200">
-                    <ul class="list-disc pl-5">
-                        <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <li><?php echo e($error); ?></li>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </ul>
+                    <?php echo e(session('error')); ?>
+
                 </div>
             <?php endif; ?>
 
         </div>
+        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('apply_leave_btn')): ?>
         <a href="<?php echo e(route('leave.create')); ?>"
            class="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white
                   text-[12.5px] font-semibold px-4 py-2 rounded-lg transition">
             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 14 14">
                 <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            New Leaves
+            New Leave
         </a>
+        <?php endif; ?>
     </div>
 
     
@@ -86,9 +85,11 @@
                 <th class="text-left px-5 py-2.5 text-[10.5px] font-semibold uppercase tracking-[0.07em] text-gray-300">
                     Approval
                 </th>
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('leave_approval_btn')): ?>
                 <th class="text-left px-5 py-2.5 text-[10.5px] font-semibold uppercase tracking-[0.07em] text-gray-300">
                     Action
                 </th>
+                <?php endif; ?>
             </tr>
             </thead>
             <tbody>
@@ -150,6 +151,7 @@
                     </td>
                     
                     <td class="px-5 py-3.5">
+                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('leave_approval_btn')): ?>
                         <div class="flex items-center gap-1">
                             <a href="<?php echo e(route('leave.edit',$leave->id)); ?>"
                                class="w-7 h-7 rounded-lg border border-black/10 flex items-center justify-center
@@ -184,7 +186,7 @@
                                 </svg>
 
                             </a>
-                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('leave_approval_btn')): ?>
+
                             <div class="flex items-center gap-2">
 
                                 
@@ -217,8 +219,9 @@
                                 </form>
 
                             </div>
-                            <?php endif; ?>
+
                         </div>
+                        <?php endif; ?>
                     </td>
 
                 </tr>
