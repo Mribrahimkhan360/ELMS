@@ -101,7 +101,7 @@
             </a>
 
             @can('admin_nav')
-                <a href="{{ route('permissions.index') }}"
+                <a href="{{ route('permissions.create') }}"
                    class="sb-item {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
                     <svg class="sb-icon" viewBox="0 0 16 16" fill="none">
                         <rect x="2" y="5" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
@@ -144,7 +144,7 @@
                 </div>
             @endcan
 
-            <a href="#" class="sb-item">
+            <a href="{{ route('leaves.create') }}" class="sb-item">
                 <svg class="sb-icon" viewBox="0 0 16 16" fill="none">
                     <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/>
                     <path d="M5 8h6M5 5h4M5 11h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>

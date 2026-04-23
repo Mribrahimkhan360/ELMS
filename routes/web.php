@@ -6,6 +6,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdministrationController;
+use App\Http\Controllers\LeaveController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('roles', RoleController::class);
     Route::resource('users',UserController::class);
     Route::resource('administrations',AdministrationController::class);
+    Route::resource('leaves',LeaveController::class);
 });
 
 require __DIR__.'/auth.php';
