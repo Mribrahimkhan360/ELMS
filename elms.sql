@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2026 at 10:39 AM
+-- Generation Time: Apr 23, 2026 at 12:10 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -59,7 +59,7 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('spatie.permission.cache', 'a:3:{s:5:\"alias\";a:4:{s:1:\"a\";s:2:\"id\";s:1:\"b\";s:4:\"name\";s:1:\"c\";s:10:\"guard_name\";s:1:\"r\";s:5:\"roles\";}s:11:\"permissions\";a:6:{i:0;a:3:{s:1:\"a\";i:4;s:1:\"b\";s:4:\"edit\";s:1:\"c\";s:3:\"web\";}i:1;a:3:{s:1:\"a\";i:5;s:1:\"b\";s:6:\"delete\";s:1:\"c\";s:3:\"web\";}i:2;a:4:{s:1:\"a\";i:6;s:1:\"b\";s:9:\"admin_nav\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:2;}}i:3;a:4:{s:1:\"a\";i:7;s:1:\"b\";s:18:\"nav_administration\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:2;i:1;i:3;}}i:4;a:4:{s:1:\"a\";i:8;s:1:\"b\";s:22:\"nav_nav_administration\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:2;}}i:5;a:4:{s:1:\"a\";i:9;s:1:\"b\";s:14:\"delete_account\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:3;}}}s:5:\"roles\";a:2:{i:0;a:3:{s:1:\"a\";i:2;s:1:\"b\";s:5:\"Admin\";s:1:\"c\";s:3:\"web\";}i:1;a:3:{s:1:\"a\";i:3;s:1:\"b\";s:2:\"Hr\";s:1:\"c\";s:3:\"web\";}}}', 1777018920);
+('spatie.permission.cache', 'a:3:{s:5:\"alias\";a:4:{s:1:\"a\";s:2:\"id\";s:1:\"b\";s:4:\"name\";s:1:\"c\";s:10:\"guard_name\";s:1:\"r\";s:5:\"roles\";}s:11:\"permissions\";a:7:{i:0;a:3:{s:1:\"a\";i:4;s:1:\"b\";s:4:\"edit\";s:1:\"c\";s:3:\"web\";}i:1;a:3:{s:1:\"a\";i:5;s:1:\"b\";s:6:\"delete\";s:1:\"c\";s:3:\"web\";}i:2;a:4:{s:1:\"a\";i:6;s:1:\"b\";s:9:\"admin_nav\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:2;}}i:3;a:4:{s:1:\"a\";i:7;s:1:\"b\";s:18:\"nav_administration\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:2;i:1;i:3;}}i:4;a:4:{s:1:\"a\";i:8;s:1:\"b\";s:22:\"nav_nav_administration\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:2;i:1;i:3;}}i:5;a:4:{s:1:\"a\";i:9;s:1:\"b\";s:14:\"delete_account\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:3;}}i:6;a:3:{s:1:\"a\";i:10;s:1:\"b\";s:18:\"leave_approval_btn\";s:1:\"c\";s:3:\"web\";}}s:5:\"roles\";a:2:{i:0;a:3:{s:1:\"a\";i:2;s:1:\"b\";s:5:\"Admin\";s:1:\"c\";s:3:\"web\";}i:1;a:3:{s:1:\"a\";i:3;s:1:\"b\";s:2:\"Hr\";s:1:\"c\";s:3:\"web\";}}}', 1777025402);
 
 -- --------------------------------------------------------
 
@@ -149,7 +149,9 @@ CREATE TABLE `leaves` (
 --
 
 INSERT INTO `leaves` (`id`, `user_id`, `form_date`, `to_date`, `leave_type`, `attachment`, `approved_by`, `approved_at`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, '2026-04-23', '2026-04-24', 'sick', 'Permissions/BbxlSZYy7PJikDQCStnPJDVt9bsifhPV6h9WdyLH.png', NULL, NULL, '2026-04-23 02:29:13', '2026-04-23 02:29:13', NULL);
+(1, 1, '2026-04-23', '2026-04-24', 'sick', 'Permissions/BbxlSZYy7PJikDQCStnPJDVt9bsifhPV6h9WdyLH.png', NULL, NULL, '2026-04-23 02:29:13', '2026-04-23 03:57:48', '2026-04-23 03:57:48'),
+(2, 1, '2026-04-24', '2026-04-25', 'sick', 'Permissions/oYkz8qbF0cM2O6ddjGTho3WwdGeiDxGkEBc4F5ZI.png', NULL, NULL, '2026-04-23 03:56:29', '2026-04-23 03:57:51', '2026-04-23 03:57:51'),
+(3, 1, '2026-04-23', '2026-04-24', 'casual', 'image/1pH79hxQU14vwNGAyv94p8YsHarwyx9g1DDVTY9o.png', NULL, NULL, '2026-04-23 03:58:57', '2026-04-23 03:58:57', NULL);
 
 -- --------------------------------------------------------
 
@@ -244,7 +246,8 @@ INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at
 (6, 'admin_nav', 'web', '2026-04-21 04:13:37', '2026-04-22 02:29:13'),
 (7, 'nav_administration', 'web', '2026-04-22 02:54:26', '2026-04-22 02:54:26'),
 (8, 'nav_nav_administration', 'web', '2026-04-22 03:07:48', '2026-04-22 03:07:48'),
-(9, 'delete_account', 'web', '2026-04-22 03:16:08', '2026-04-22 03:16:08');
+(9, 'delete_account', 'web', '2026-04-22 03:16:08', '2026-04-22 03:16:08'),
+(10, 'leave_approval_btn', 'web', '2026-04-23 04:03:44', '2026-04-23 04:03:44');
 
 -- --------------------------------------------------------
 
@@ -289,6 +292,7 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (7, 2),
 (7, 3),
 (8, 2),
+(8, 3),
 (9, 3);
 
 -- --------------------------------------------------------
@@ -311,7 +315,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('zWjVTlBvKFT6Avcr1wnSglT6KGqfu9zGbkIk97Yq', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiUEE3ZUJpalo5dlhFY1JKSVliWkxxYlFaa3I2SlFHREY4Tnd3OGRMbiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzU6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sZWF2ZXMvY3JlYXRlIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1776933137);
+('zWjVTlBvKFT6Avcr1wnSglT6KGqfu9zGbkIk97Yq', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiUEE3ZUJpalo5dlhFY1JKSVliWkxxYlFaa3I2SlFHREY4Tnd3OGRMbiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9yb2xlcyI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1776939002);
 
 -- --------------------------------------------------------
 
@@ -477,7 +481,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `leaves`
 --
 ALTER TABLE `leaves`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -489,7 +493,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `roles`

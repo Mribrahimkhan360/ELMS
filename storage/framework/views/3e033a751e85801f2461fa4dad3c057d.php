@@ -1,45 +1,55 @@
-<x-app-layout>
-    {{-- Page Top --}}
+<?php if (isset($component)) { $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54 = $attributes; } ?>
+<?php $component = App\View\Components\AppLayout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('app-layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\AppLayout::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+    
     <div class="flex items-start justify-between mb-5">
         <div>
             <h1 class="text-[17px] font-semibold text-gray-900">Permissions</h1>
             <p class="text-[12px] text-gray-400 mt-0.5">Manage user roles and their Permissions</p>
 
-            {{-- Success Message --}}
-            @if(session('success'))
+            
+            <?php if(session('success')): ?>
                 <div
                     class="mb-3 px-4 py-2 bg-green-100 text-green-700 text-[12.5px] rounded-lg border border-green-200">
-                    {{ session('success') }}
-                </div>
-            @endif
+                    <?php echo e(session('success')); ?>
 
-            {{-- Error Message --}}
-            @if($errors->any())
+                </div>
+            <?php endif; ?>
+
+            
+            <?php if($errors->any()): ?>
                 <div class="mb-3 px-4 py-2 bg-red-100 text-red-700 text-[12.5px] rounded-lg border border-red-200">
                     <ul class="list-disc pl-5">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
+                        <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <li><?php echo e($error); ?></li>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </ul>
                 </div>
-            @endif
+            <?php endif; ?>
 
         </div>
-        <a href="{{ route('roles.create') }}"
+        <a href="<?php echo e(route('leave.create')); ?>"
            class="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white
                   text-[12.5px] font-semibold px-4 py-2 rounded-lg transition">
             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 14 14">
                 <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            New Role
+            New Leaves
         </a>
     </div>
 
-    {{-- Table Card --}}
+    
     <div class="bg-white rounded-xl border border-black/[0.08] overflow-hidden">
-        {{-- Card Header --}}
+        
         <div class="flex items-center justify-between px-5 py-3.5 border-b border-black/[0.07]">
-            <span class="text-[13px] font-semibold text-gray-900">All Roles</span>
+            <span class="text-[13px] font-semibold text-gray-900">All Leaves</span>
             <div class="relative">
                 <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none"
                      fill="none" viewBox="0 0 16 16">
@@ -53,7 +63,7 @@
             </div>
         </div>
 
-        {{-- Table --}}
+        
         <table class="w-full border-collapse">
             <thead>
             <tr class="border-b border-black/[0.07]">
@@ -61,13 +71,20 @@
                     #
                 </th>
                 <th class="text-left px-5 py-2.5 text-[10.5px] font-semibold uppercase tracking-[0.07em] text-gray-300">
-                    Role
+                    Leaves Type
                 </th>
                 <th class="text-left px-5 py-2.5 text-[10.5px] font-semibold uppercase tracking-[0.07em] text-gray-300">
-                    Permissions
+                    From Date
+                </th>
+
+                <th class="text-left px-5 py-2.5 text-[10.5px] font-semibold uppercase tracking-[0.07em] text-gray-300">
+                    To Date
                 </th>
                 <th class="text-left px-5 py-2.5 text-[10.5px] font-semibold uppercase tracking-[0.07em] text-gray-300">
                     Created
+                </th>
+                <th class="text-left px-5 py-2.5 text-[10.5px] font-semibold uppercase tracking-[0.07em] text-gray-300">
+                    Approval
                 </th>
                 <th class="text-left px-5 py-2.5 text-[10.5px] font-semibold uppercase tracking-[0.07em] text-gray-300">
                     Action
@@ -75,53 +92,66 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($roles as $role)
+            <?php $__currentLoopData = $leaves; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $leave): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr class="border-b border-black/[0.05] hover:bg-gray-50/60 transition last:border-0">
-                    {{-- ID --}}
+                    
                     <td class="px-5 py-3.5">
                         <div class="flex items-center gap-2.5">
                             <span class="text-[13px] font-semibold text-gray-900">
-                            {{ $loop->iteration }}
-                        </span>
-                        </div>
-                    </td>
-                    {{-- Role Name --}}
-                    <td class="px-5 py-3.5">
-                        <div class="flex items-center gap-2.5">
-                            <span class="text-[13px] font-semibold text-gray-900">
-                            {{ $role->name ?? 'Name is empty'}}
-                        </span>
-                        </div>
-                    </td>
+                            <?php echo e($loop->iteration); ?>
 
-                    {{-- Permisson Name --}}
-                    <td class="px-5 py-3.5">
-                        <div class="flex items-center gap-2.5">
-                            <span class="text-[13px] font-semibold text-gray-900">
-                              <div class="md:col-span-2">
-                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                                    @forelse($role->Permissions as $permission)
-                                        <span class="perm-badge">{{ $permission->name }}</span>
-                                    @empty
-                                        <span class="no-perms">No Permissions</span>
-                                    @endforelse
-                                </div>
-                            </div>
                         </span>
                         </div>
                     </td>
-                    {{-- created --}}
+                    
                     <td class="px-5 py-3.5">
                         <div class="flex items-center gap-2.5">
                             <span class="text-[13px] font-semibold text-gray-900">
-                            {{ $role->created_at ?? 'Date is empty' }}
+                            <?php echo e($leave->leave_type ?? ''); ?>
+
                         </span>
                         </div>
                     </td>
-                    {{-- Actions --}}
+                    
+                    <td class="px-5 py-3.5">
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-[13px] font-semibold text-gray-900">
+                            <?php echo e($leave->form_date ?? ''); ?>
+
+                        </span>
+                        </div>
+                    </td>
+                    
+                    <td class="px-5 py-3.5">
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-[13px] font-semibold text-gray-900">
+                            <?php echo e($leave->to_date ?? ''); ?>
+
+                        </span>
+                        </div>
+                    </td>
+                    
+                    <td class="px-5 py-3.5">
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-[13px] font-semibold text-gray-900">
+                            <?php echo e($leave->created_at ?? ''); ?>
+
+                        </span>
+                        </div>
+                    </td>
+                    
+                    <td class="px-5 py-3.5">
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-[13px] font-semibold text-gray-900">
+                            <?php echo e($leave->approved_by ?? 'pending'); ?>
+
+                        </span>
+                        </div>
+                    </td>
+                    
                     <td class="px-5 py-3.5">
                         <div class="flex items-center gap-1">
-                            <a href="{{ route('roles.edit',$role->id) }}"
+                            <a href="<?php echo e(route('leave.edit',$leave->id)); ?>"
                                class="w-7 h-7 rounded-lg border border-black/10 flex items-center justify-center
                                           text-gray-400 hover:bg-gray-100 transition">
                                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 16 16">
@@ -129,11 +159,11 @@
                                           stroke-linejoin="round"/>
                                 </svg>
                             </a>
-                            <form method="POST" action="{{ route('roles.destroy',$role->id) }}"
-                                  onsubmit="return confirm('Do you delete this role?')"
+                            <form method="POST" action="<?php echo e(route('leave.destroy', $leave->id)); ?>"
+                                  onsubmit="return confirm('Do you delete this leave?')"
                             >
-                                @csrf
-                                @method('DELETE')
+                                <?php echo csrf_field(); ?>
+                                <?php echo method_field('DELETE'); ?>
                                 <button type="submit" class="w-7 h-7 rounded-lg border border-black/10 flex items-center justify-center
                                     text-gray-400 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition">
                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 16 16">
@@ -142,7 +172,7 @@
                                     </svg>
                                 </button>
                             </form>
-                            <a href="{{ route('roles.show',$role->id) }}"
+                            <a href="<?php echo e(route('leave.show',$leave->id)); ?>"
                                class="w-7 h-7 rounded-lg border border-black/10 flex items-center justify-center
                             text-gray-400 hover:bg-gray-100 transition">
 
@@ -154,13 +184,49 @@
                                 </svg>
 
                             </a>
+                            <div class="flex items-center gap-2">
+
+                                
+                                <a href=""
+                                   class="w-7 h-7 rounded-lg border border-green-500/20 flex items-center justify-center
+              text-green-500 hover:bg-green-50 transition">
+
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                              d="M4.5 12.75l6 6 9-13.5"/>
+                                    </svg>
+                                </a>
+
+                                
+                                <a href=""
+                                   class="w-7 h-7 rounded-lg border border-red-500/20 flex items-center justify-center
+              text-red-500 hover:bg-red-50 transition">
+
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                              d="M6 6l12 12M18 6L6 18"/>
+                                    </svg>
+                                </a>
+
+                            </div>
+
                         </div>
                     </td>
 
                 </tr>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             </tbody>
         </table>
     </div>
-</x-app-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
+<?php $attributes = $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
+<?php unset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
+<?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
+<?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
+<?php endif; ?>
+<?php /**PATH C:\xampp\htdocs\ELMS\resources\views/leave/index.blade.php ENDPATH**/ ?>

@@ -31,7 +31,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('leaves.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('leave.store') }}" enctype="multipart/form-data">
         @csrf
 
         <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-3 items-start">

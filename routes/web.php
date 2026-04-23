@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('roles', RoleController::class);
     Route::resource('users',UserController::class);
     Route::resource('administrations',AdministrationController::class);
-    Route::resource('leaves',LeaveController::class);
+    Route::resource('leave',LeaveController::class);
 });
 
 require __DIR__.'/auth.php';
