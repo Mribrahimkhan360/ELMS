@@ -8,130 +8,472 @@
     <title>{{ config('app.name', 'Admin Panel') }}</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=geist:300,400,500,600,700&display=swap" rel="stylesheet" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        /* ── Reset & Base ─────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; }
+
+        :root {
+            --sidebar-w: 230px;
+            --header-h: 52px;
+            --bg: #f0f2f5;
+            --surface: #ffffff;
+            --surface-2: #f7f8fa;
+            --border: rgba(0,0,0,0.07);
+            --text: #111827;
+            --text-muted: #6b7280;
+            --text-faint: #9ca3af;
+            --accent: #4f46e5;
+            --accent-light: #ede9fe;
+            --accent-text: #4338ca;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+
+            /* Sidebar tokens */
+            --sb-bg: #0d0f14;
+            --sb-border: rgba(255,255,255,0.06);
+            --sb-text: rgba(255,255,255,0.45);
+            --sb-text-hover: rgba(255,255,255,0.82);
+            --sb-item-hover: rgba(255,255,255,0.05);
+            --sb-item-active-bg: rgba(99,102,241,0.18);
+            --sb-item-active-text: #a5b4fc;
+            --sb-section: rgba(255,255,255,0.22);
+        }
+
+        body {
+            font-family: 'Geist', 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Prevent FOUC / jank ─────────────────────────── */
+        [x-cloak] { display: none !important; }
+
+        /* Page fade-in on load */
+        body { animation: pageIn 180ms ease both; }
+        @keyframes pageIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ── Layout Shell ────────────────────────────────── */
+        .layout { display: flex; height: 100dvh; overflow: hidden; }
+
+        /* ── Overlay (mobile) ────────────────────────────── */
+        .sidebar-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 30;
+            backdrop-filter: blur(2px);
+        }
+        @media (max-width: 767px) {
+            .sidebar-overlay.active { display: block; }
+        }
+
+        /* ── Sidebar ─────────────────────────────────────── */
+        .sidebar {
+            position: relative;
+            width: var(--sidebar-w);
+            background: var(--sb-bg);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            transition: width 260ms cubic-bezier(.4,0,.2,1),
+            transform 260ms cubic-bezier(.4,0,.2,1);
+            overflow: hidden;
+            z-index: 40;
+        }
+        .sidebar.collapsed { width: 0; }
+
+        @media (max-width: 767px) {
+            .sidebar {
+                position: fixed;
+                left: 0; top: 0; bottom: 0;
+                width: var(--sidebar-w) !important;
+                transform: translateX(-100%);
+            }
+            .sidebar.mobile-open { transform: translateX(0); }
+        }
+
+        /* Brand / Logo */
+        .sb-logo {
+            display: flex; align-items: center; gap: 10px;
+            padding: 16px 16px;
+            border-bottom: 1px solid var(--sb-border);
+            min-height: var(--header-h);
+            white-space: nowrap;
+        }
+        .sb-logo-icon {
+            width: 30px; height: 30px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(99,102,241,0.35);
+        }
+        .sb-logo-icon svg { width: 14px; height: 14px; color: #fff; }
+        .sb-logo-label {
+            font-size: 12.5px; font-weight: 600;
+            color: rgba(255,255,255,0.88);
+            letter-spacing: 0.01em;
+            text-transform: capitalize;
+        }
+
+        /* Nav */
+        .sb-nav { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 10px 10px; }
+        .sb-nav::-webkit-scrollbar { width: 3px; }
+        .sb-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+        .sb-section-label {
+            font-size: 9.5px; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--sb-text);
+            padding: 14px 10px 6px;
+            white-space: nowrap;
+            opacity: 0.55;
+        }
+
+        /* Nav Item */
+        .sb-item {
+            display: flex; align-items: center; gap: 9px;
+            padding: 7.5px 10px;
+            border-radius: 8px;
+            font-size: 12.5px; font-weight: 500;
+            color: var(--sb-text);
+            text-decoration: none;
+            transition: background 150ms, color 150ms;
+            white-space: nowrap;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+        .sb-item:hover { background: var(--sb-item-hover); color: var(--sb-text-hover); }
+        .sb-item.active {
+            background: var(--sb-item-active-bg);
+            color: var(--sb-item-active-text);
+        }
+        .sb-item.active .sb-icon { color: var(--sb-item-active-text); }
+        .sb-icon {
+            width: 15px; height: 15px; flex-shrink: 0;
+            color: rgba(255,255,255,0.35);
+            transition: color 150ms;
+        }
+        .sb-item:hover .sb-icon { color: rgba(255,255,255,0.65); }
+        .sb-item.sm-item { font-size: 12px; padding: 6px 10px; }
+
+        /* Dropdown */
+        .sb-dropdown { margin-left: 12px; margin-top: 2px; padding-left: 12px; border-left: 1px solid rgba(255,255,255,0.08); }
+        .sb-chevron {
+            margin-left: auto; width: 12px; height: 12px;
+            opacity: 0.35; flex-shrink: 0;
+            transition: transform 220ms ease;
+        }
+        .sb-chevron.rotated { transform: rotate(90deg); }
+
+        /* Sidebar Footer */
+        .sb-footer {
+            padding: 10px 10px;
+            border-top: 1px solid var(--sb-border);
+        }
+
+        /* ── Main Area ───────────────────────────────────── */
+        .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+        /* ── Header ──────────────────────────────────────── */
+        .topbar {
+            height: var(--header-h);
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 8px;
+            padding: 0 16px;
+            flex-shrink: 0;
+            position: sticky; top: 0; z-index: 20;
+        }
+
+        .topbar-toggle {
+            width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 8px;
+            border: none; background: transparent; cursor: pointer;
+            color: var(--text-muted);
+            transition: background 150ms, color 150ms;
+            flex-shrink: 0;
+        }
+        .topbar-toggle:hover { background: var(--surface-2); color: var(--text); }
+
+        /* Search */
+        .topbar-search {
+            position: relative;
+            max-width: 200px;
+            width: 100%;
+        }
+        .topbar-search svg {
+            position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+            width: 13px; height: 13px; color: var(--text-faint); pointer-events: none;
+        }
+        .topbar-search input {
+            width: 100%;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 12px 6px 32px;
+            font-size: 12.5px; font-family: inherit;
+            color: var(--text);
+            outline: none;
+            transition: border-color 150ms, box-shadow 150ms;
+        }
+        .topbar-search input::placeholder { color: var(--text-faint); }
+        .topbar-search input:focus {
+            border-color: rgba(99,102,241,0.45);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+        }
+
+        /* Right side */
+        .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+
+        .icon-btn {
+            width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 8px; border: none; background: transparent; cursor: pointer;
+            color: var(--text-muted); position: relative;
+            transition: background 150ms, color 150ms;
+        }
+        .icon-btn:hover { background: var(--surface-2); color: var(--text); }
+        .notif-dot {
+            position: absolute; top: 6px; right: 6px;
+            width: 6px; height: 6px;
+            background: var(--danger); border-radius: 50%;
+            border: 1.5px solid var(--surface);
+        }
+
+        .topbar-divider { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
+
+        /* User menu */
+        .user-btn {
+            display: flex; align-items: center; gap: 8px;
+            padding: 4px 8px 4px 4px;
+            border-radius: 8px; border: none; background: transparent; cursor: pointer;
+            transition: background 150ms;
+        }
+        .user-btn:hover { background: var(--surface-2); }
+        .user-avatar {
+            width: 28px; height: 28px; border-radius: 7px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10.5px; font-weight: 700; color: #fff; flex-shrink: 0;
+        }
+        .user-name { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1; }
+        .user-role { font-size: 10.5px; color: var(--text-faint); line-height: 1; margin-top: 2px; }
+
+        /* Dropdown */
+        .dropdown-menu {
+            position: absolute; right: 0; top: calc(100% + 6px);
+            width: 180px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05);
+            padding: 5px;
+            z-index: 50;
+            animation: dropIn 150ms ease both;
+        }
+        @keyframes dropIn {
+            from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+            to   { opacity: 1; transform: translateY(0)  scale(1); }
+        }
+        .dropdown-item {
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 10px; border-radius: 7px;
+            font-size: 12.5px; font-weight: 500; color: var(--text);
+            text-decoration: none; cursor: pointer;
+            transition: background 120ms;
+            border: none; background: transparent; width: 100%; text-align: left;
+        }
+        .dropdown-item:hover { background: var(--surface-2); }
+        .dropdown-item.danger { color: var(--danger); }
+        .dropdown-item.danger:hover { background: var(--danger-bg); }
+        .dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
+
+        /* ── Page Header ─────────────────────────────────── */
+        .page-header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 20px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .page-header h1 {
+            font-size: 15px; font-weight: 600;
+            color: var(--text); margin: 0;
+        }
+
+        /* ── Content ─────────────────────────────────────── */
+        .page-content {
+            flex: 1; overflow-y: auto;
+            padding: 20px;
+        }
+
+        /* ── Responsive ──────────────────────────────────── */
+        @media (max-width: 640px) {
+            .topbar-search { max-width: 130px; }
+            .user-name, .user-role { display: none; }
+            .page-content { padding: 14px; }
+        }
+        @media (max-width: 767px) {
+            .topbar-search { max-width: 150px; }
+        }
     </style>
 </head>
 
-<body class="antialiased bg-[#f4f5f7]">
+<body>
 
-<div x-data="{ sidebarOpen: true }" class="flex h-screen overflow-hidden">
+{{-- Alpine Wrapper --}}
+<div
+    x-data="{
+        sidebarOpen: window.innerWidth >= 768,
+        mobileOpen: false,
+        dropdownOpen: false,
+        adminOpen: false,
+        get isMobile() { return window.innerWidth < 768; },
+        toggleSidebar() {
+            if (this.isMobile) {
+                this.mobileOpen = !this.mobileOpen;
+            } else {
+                this.sidebarOpen = !this.sidebarOpen;
+            }
+        }
+    }"
+    x-cloak
+    class="layout"
+>
 
-    {{-- ─── Sidebar ─────────────────────────────────────── --}}
+    {{-- ─── Mobile Overlay ──────────────────────────── --}}
+    <div
+        class="sidebar-overlay"
+        :class="{ 'active': mobileOpen }"
+        @click="mobileOpen = false"
+    ></div>
+
+    {{-- ─── Sidebar ─────────────────────────────────── --}}
     <aside
-        :class="sidebarOpen ? 'w-56' : 'w-0 overflow-hidden'"
-        class="bg-[#0f1117] flex flex-col shrink-0 transition-all duration-300"
+        class="sidebar"
+        :class="{
+            'collapsed': !sidebarOpen && !isMobile,
+            'mobile-open': mobileOpen
+        }"
     >
-
         {{-- Logo --}}
-        <div class="flex items-center gap-3 px-4 py-[18px] border-b border-white/[0.07]">
-            <div class="w-7 h-7 rounded-[7px] bg-indigo-500 flex items-center justify-center shrink-0">
-                <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 14 14">
+        <div class="sb-logo">
+            <div class="sb-logo-icon">
+                <svg fill="none" viewBox="0 0 14 14">
                     <path d="M2 7h10M7 2v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
             </div>
-            <span class="text-[13px] font-semibold text-white tracking-wide capitalize">{{ auth()->user()->roles->pluck('name')->join(', ') }} Panel</span>
+            <span class="sb-logo-label">{{ auth()->user()->roles->pluck('name')->join(', ') }} Panel</span>
         </div>
 
         {{-- Navigation --}}
-        <nav class="flex-1 overflow-y-auto px-2.5 py-3 space-y-0.5">
+        <nav class="sb-nav">
 
             {{-- Section: Main --}}
-            <p class="text-[10px] font-semibold uppercase tracking-widest text-white/30 px-2 pt-2 pb-1.5">Main</p>
+            <p class="sb-section-label">Main</p>
 
-            <x-admin-nav-item href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                <x-slot name="icon">
+            <a href="{{ route('dashboard') }}"
+               class="sb-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <svg class="sb-icon" viewBox="0 0 16 16" fill="none">
                     <rect x="1" y="1" width="6" height="6" rx="1.5" fill="currentColor"/>
                     <rect x="9" y="1" width="6" height="6" rx="1.5" fill="currentColor"/>
                     <rect x="1" y="9" width="6" height="6" rx="1.5" fill="currentColor"/>
                     <rect x="9" y="9" width="6" height="6" rx="1.5" fill="currentColor"/>
-                </x-slot>
+                </svg>
                 Dashboard
-            </x-admin-nav-item>
+            </a>
 
-            {{-- Section: Access Control --}}
+            {{-- Section: Access --}}
             @can('admin_nav')
-                <p class="text-[10px] font-semibold uppercase tracking-widest text-white/30 px-2 pt-4 pb-1.5">Access</p>
-                <x-admin-nav-item :href="route('users.index')">
-                    <x-slot name="icon">
+                <p class="sb-section-label">Access Control</p>
+
+                <a href="{{ route('users.index') }}"
+                   class="sb-item {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                    <svg class="sb-icon" viewBox="0 0 16 16" fill="none">
                         <circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.4"/>
                         <path d="M2 13c0-2.5 2.7-4 6-4s6 1.5 6 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-                    </x-slot>
+                    </svg>
                     Users
-                </x-admin-nav-item>
+                </a>
             @endcan
 
-            {{--            @can('admin_nav')--}}
-            <x-admin-nav-item :href="route('roles.index')">
-                <x-slot name="icon">
+            <a href="{{ route('roles.index') }}"
+               class="sb-item {{ request()->routeIs('roles.*') ? 'active' : '' }}">
+                <svg class="sb-icon" viewBox="0 0 16 16" fill="none">
                     <path d="M8 1l2 4h4l-3 3 1 4-4-2.5L4 12l1-4L2 5h4z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
-                </x-slot>
+                </svg>
                 Roles
-            </x-admin-nav-item>
-            {{--            @endcan--}}
+            </a>
+
             @can('admin_nav')
-                <x-admin-nav-item :href="route('permissions.index')">
-                    <x-slot name="icon">
+                <a href="{{ route('permissions.index') }}"
+                   class="sb-item {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
+                    <svg class="sb-icon" viewBox="0 0 16 16" fill="none">
                         <rect x="2" y="5" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
                         <path d="M5 5V4a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.4"/>
-                    </x-slot>
+                    </svg>
                     Permissions
-                </x-admin-nav-item>
+                </a>
             @endcan
-            {{-- Section: Administration (Dropdown) --}}
-            <p class="text-[10px] font-semibold uppercase tracking-widest text-white/30 px-2 pt-4 pb-1.5">Administration</p>
 
-            <div>
+            {{-- Section: Administration --}}
+            <p class="sb-section-label">Administration</p>
 
-                @can('nav_administration')
-                    <button @click="open = !open"
-                            class="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[12.5px] font-medium
-                           text-white/55 hover:text-white/85 hover:bg-white/[0.06] transition-all duration-150">
-                        <svg class="w-[15px] h-[15px] shrink-0" fill="none" viewBox="0 0 16 16">
-                            <path d="M8 2v3M8 11v3M2 8h3M11 8h3M4 4l2 2M10 10l2 2M4 12l2-2M10 6l2-2"
-                                  stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                        </svg>
-                        <span class="flex-1 text-left">Administration</span>
-                        <svg class="w-3 h-3 opacity-40 transition-transform duration-200" :class="{ 'rotate-90': open }"
-                             fill="none" viewBox="0 0 12 12">
-                            <path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                @endcan
+            @can('nav_administration')
+                <button
+                    class="sb-item"
+                    @click="adminOpen = !adminOpen"
+                    :class="{ 'active': adminOpen }"
+                >
+                    <svg class="sb-icon" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 2v3M8 11v3M2 8h3M11 8h3M4 4l2 2M10 10l2 2M4 12l2-2M10 6l2-2"
+                              stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                    </svg>
+                    Administration
+                    <svg class="sb-chevron" :class="{ 'rotated': adminOpen }" fill="none" viewBox="0 0 12 12">
+                        <path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
 
-                <div x-show="open" x-collapse class="ml-3 mt-1 space-y-0.5 border-l border-white/[0.08] pl-3">
-                    {{--                    href="{{ route('administrations.index') }}" :active="request()->routeIs('administrations.*')"--}}
+                <div x-show="adminOpen" x-collapse class="sb-dropdown">
                     @can('nav_nav_administration')
-                        <x-admin-nav-item size="sm" :href="route('administrations.index')">Admin</x-admin-nav-item>
+                        <a href="{{ route('administrations.index') }}"
+                           class="sb-item sm-item {{ request()->routeIs('administrations.*') ? 'active' : '' }}">
+                            Admin
+                        </a>
                     @endcan
                     @can('nav_administration')
-                        <x-admin-nav-item href="" size="sm">HR</x-admin-nav-item>
-                        <x-admin-nav-item href="" size="sm">Employee</x-admin-nav-item>
+                        <a href="#" class="sb-item sm-item">HR</a>
+                        <a href="#" class="sb-item sm-item">Employee</a>
                     @endcan
                 </div>
-            </div>
+            @endcan
 
-            <x-admin-nav-item>
-                <x-slot name="icon">
+            <a href="#" class="sb-item">
+                <svg class="sb-icon" viewBox="0 0 16 16" fill="none">
                     <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/>
                     <path d="M5 8h6M5 5h4M5 11h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                </x-slot>
+                </svg>
                 Leave Applications
-            </x-admin-nav-item>
+            </a>
+
         </nav>
 
-        {{-- Bottom: Sign Out --}}
-        <div class="px-2.5 py-3 border-t border-white/[0.07]">
+        {{-- Sign Out --}}
+        <div class="sb-footer">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit"
-                        class="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[12.5px] font-medium
-                           text-white/40 hover:text-white/70 hover:bg-white/[0.05] transition-all duration-150">
-                    <svg class="w-[15px] h-[15px] shrink-0" fill="none" viewBox="0 0 16 16">
+                <button type="submit" class="sb-item" style="color: rgba(255,255,255,0.3);">
+                    <svg class="sb-icon" viewBox="0 0 16 16" fill="none">
                         <path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3M10 11l4-4-4-4M14 7H6"
                               stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -141,104 +483,98 @@
         </div>
     </aside>
 
-    {{-- ─── Main Area ───────────────────────────────────── --}}
-    <div class="flex-1 flex flex-col min-w-0">
+    {{-- ─── Main Area ───────────────────────────────── --}}
+    <div class="main">
 
-        {{-- Top Navigation Bar --}}
-        <header class="h-[52px] bg-white border-b border-black/[0.08] flex items-center gap-2 md:gap-3 px-3 md:px-5">
-            <button @click="sidebarOpen = !sidebarOpen"
-                    class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition">
+        {{-- Topbar --}}
+        <header class="topbar">
 
-                <svg x-show="!sidebarOpen" class="w-4 h-4" fill="none" viewBox="0 0 24 24">
-                    <path d="M4 6h16M4 12h16M4 18h16"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            {{-- Toggle Button --}}
+            <button class="topbar-toggle" @click="toggleSidebar()">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
-
-                <svg x-show="sidebarOpen" class="w-4 h-4" fill="none" viewBox="0 0 24 24">
-                    <path d="M6 6l12 12M18 6L6 18"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-
             </button>
+
             {{-- Search --}}
-            <div class="relative w-full max-w-[160px] sm:max-w-xs">
-                <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none"
-                     fill="none" viewBox="0 0 16 16">
+            <div class="topbar-search">
+                <svg viewBox="0 0 16 16" fill="none">
                     <circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/>
                     <path d="M10.5 10.5l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
-                <input type="search" placeholder="Search…"
-                       class="w-full bg-[#f4f5f7] border border-black/10 rounded-lg pl-8 pr-3 py-1.5
-                           text-[12.5px] text-gray-700 placeholder-gray-400 focus:outline-none
-                           focus:ring-2 focus:ring-indigo-400/40 focus:border-indigo-400 transition">
+                <input type="search" placeholder="Search…">
             </div>
 
-            {{-- Right side --}}
-            <div class="ml-auto flex items-center gap-1 md:gap-2">
+            {{-- Right --}}
+            <div class="topbar-right">
 
                 {{-- Notifications --}}
-                <button class="relative w-8 h-8 rounded-lg flex items-center justify-center text-gray-500
-                               hover:bg-gray-100 transition">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 16 16">
+                <button class="icon-btn">
+                    <svg width="15" height="15" fill="none" viewBox="0 0 16 16">
                         <path d="M8 1a5 5 0 015 5c0 3 1 4 1 4H2s1-1 1-4a5 5 0 015-5zM6.5 13a1.5 1.5 0 003 0"
                               stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
                     </svg>
-                    <span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full ring-2 ring-white"></span>
+                    <span class="notif-dot"></span>
                 </button>
 
-                <div class="w-px h-5 bg-black/10 mx-0.5 md:mx-1"></div>
+                <div class="topbar-divider"></div>
 
                 {{-- User Dropdown --}}
-                <div x-data="{ open: false }" class="relative">
-                    <button @click="open = !open"
-                            class="flex items-center gap-1.5 md:gap-2 hover:bg-gray-100 rounded-lg px-1.5 md:px-2 py-1 transition">
-                        <div class="w-[30px] h-[30px] rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500
-                                    flex items-center justify-center text-[11px] font-semibold text-white shrink-0">
+                <div x-data="{ open: false }" style="position:relative;">
+                    <button class="user-btn" @click="open = !open">
+                        <div class="user-avatar">
                             {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
                         </div>
-                        <div class="text-left hidden sm:block">
-                            <p class="text-[12px] font-semibold text-gray-800 leading-none">{{ auth()->user()->name }}</p>
-                            <p class="text-[10.5px] text-gray-400 mt-0.5 leading-none">Administrator</p>
+                        <div class="hidden sm:block" style="text-align:left;">
+                            <div class="user-name">{{ auth()->user()->name }}</div>
+                            <div class="user-role">Administrator</div>
                         </div>
-                        <svg class="w-3 h-3 text-gray-400 ml-0.5 md:ml-1" fill="none" viewBox="0 0 12 12">
+                        <svg width="10" height="10" fill="none" viewBox="0 0 12 12" style="color:#9ca3af;margin-left:2px;">
                             <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
 
-                    <div x-show="open" @click.outside="open = false" x-transition
-                         class="absolute right-0 top-full mt-2 w-48 bg-white border border-black/[0.08]
-                                rounded-xl shadow-lg shadow-black/5 py-1 z-50 text-[12.5px]">
-                        <a href="{{ route('profile.edit') }}"
-                           class="flex items-center gap-2.5 px-3.5 py-2 text-gray-700 hover:bg-gray-50 transition">
+                    <div x-show="open" @click.outside="open = false" x-transition.opacity class="dropdown-menu">
+                        <a href="{{ route('profile.edit') }}" class="dropdown-item">
+                            <svg width="13" height="13" fill="none" viewBox="0 0 16 16">
+                                <circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.4"/>
+                                <path d="M2 13c0-2.5 2.7-4 6-4s6 1.5 6 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                            </svg>
                             Profile Settings
                         </a>
-                        <div class="my-1 border-t border-gray-100"></div>
+                        <div class="dropdown-divider"></div>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit"
-                                    class="w-full text-left flex items-center gap-2.5 px-3.5 py-2 text-red-500 hover:bg-red-50 transition">
+                            <button type="submit" class="dropdown-item danger">
+                                <svg width="13" height="13" fill="none" viewBox="0 0 16 16">
+                                    <path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3M10 11l4-4-4-4M14 7H6"
+                                          stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
                                 Sign Out
                             </button>
                         </form>
                     </div>
                 </div>
+
             </div>
         </header>
 
         {{-- Page Header --}}
         @isset($header)
-            <div class="bg-white border-b border-black/[0.06] px-4 py-3 md:px-6 md:py-4">
-                <h1 class="text-[15px] md:text-[17px] font-semibold text-gray-900">{{ $header }}</h1>
+            <div class="page-header">
+                <h1>{{ $header }}</h1>
             </div>
         @endisset
 
         {{-- Page Content --}}
-        <main class="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6">
+        <main class="page-content">
             {{ $slot }}
         </main>
     </div>
+
 </div>
 
+{{-- Alpine.js (load before DOM ready to avoid FOUC) --}}
 <script src="//unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </body>
 </html>
