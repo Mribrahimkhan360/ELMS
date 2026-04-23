@@ -6,6 +6,7 @@ use App\Models\Leave;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class LeaveController extends Controller
 {
@@ -36,6 +37,7 @@ class LeaveController extends Controller
             'form_date' => 'required',
             'to_date'   => 'required',
             'leave_type' => 'required',
+            'approved_at' => Carbon::now(),
             'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ]);
 
@@ -52,7 +54,7 @@ class LeaveController extends Controller
             'to_date' => $request->to_date,
             'leave_type' => $request->leave_type,
             'attachment' => $attachmentPath,
-            'approved_by' => null,
+            'status' => null,
             'approved_at' => null,
         ]);
 
@@ -126,5 +128,26 @@ class LeaveController extends Controller
     {
         $leave->delete();
         return redirect()->back()->with('success','Leave delete successfully!');
+    }
+
+
+    public function approve(Leave $leave)
+    {
+        $leave->update([
+            'status' => 'approved',
+            'approved_at' => now(),
+        ]);
+
+        return back()->with('success', 'Approved!');
+    }
+
+    public function reject(Leave $leave)
+    {
+        $leave->update([
+            'status' => 'rejected',
+            'approved_at' => now(),
+        ]);
+
+        return back()->with('success', 'Rejected successfully!');
     }
 }

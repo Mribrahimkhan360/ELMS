@@ -72,7 +72,7 @@
                             
                             <div>
                                 <label class="block text-[12px] font-medium text-gray-600 mb-1.5">
-                                    To Date <span class="text-red-500">*</span>
+                                    To Date <span class="text-red-500">* </span>
                                 </label>
                                 <input type="date" name="to_date"
                                        value="<?php echo e(old('to_date', $leave->to_date)); ?>"

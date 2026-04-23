@@ -26,6 +26,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('users',UserController::class);
     Route::resource('administrations',AdministrationController::class);
     Route::resource('leave',LeaveController::class);
+
+    Route::post('/leave/{leave}/approve', [LeaveController::class, 'approve'])
+        ->name('leave.approve');
+    Route::post('/leave/{leave}/reject', [LeaveController::class, 'reject'])
+        ->name('leave.reject');
 });
 
 require __DIR__.'/auth.php';

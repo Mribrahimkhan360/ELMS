@@ -14,7 +14,7 @@ class Leave extends Model
         'to_date',
         'leave_type',
         'attachment',
-        'approved_by',
+        'status',
         'approved_at',
     ];
 

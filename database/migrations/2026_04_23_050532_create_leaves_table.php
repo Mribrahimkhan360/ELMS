@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('to_date');
             $table->enum('leave_type',['sick','casual']);
             $table->string('attachment')->nullable();
-            $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('Set null');
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamp('approved_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

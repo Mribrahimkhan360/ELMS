@@ -128,7 +128,7 @@
                     <td class="px-5 py-3.5">
                         <div class="flex items-center gap-2.5">
                             <span class="text-[13px] font-semibold text-gray-900">
-                            {{ $leave->approved_by ?? 'pending' }}
+                            {{ $leave->status ?? '' }}
                         </span>
                         </div>
                     </td>
@@ -168,32 +168,40 @@
                                 </svg>
 
                             </a>
+                            @can('leave_approval_btn')
                             <div class="flex items-center gap-2">
 
                                 {{-- Approve Button --}}
-                                <a href=""
-                                   class="w-7 h-7 rounded-lg border border-green-500/20 flex items-center justify-center
-              text-green-500 hover:bg-green-50 transition">
+                                <form action="{{ route('leave.approve', $leave->id) }}" method="POST"
+                                      onsubmit="return confirm('Do you approve this leave application?')"
+                                      class="w-7 h-7 cursor-pointer rounded-lg border border-green-500/20 flex items-center justify-center
+                                        text-green-500 hover:bg-green-50 transition">
+                                    @csrf
 
-                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                              d="M4.5 12.75l6 6 9-13.5"/>
-                                    </svg>
-                                </a>
-
+                                    <button type="submit">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M4.5 12.75l6 6 9-13.5"/>
+                                        </svg>
+                                    </button>
+                                </form>
                                 {{-- Reject Button --}}
-                                <a href=""
-                                   class="w-7 h-7 rounded-lg border border-red-500/20 flex items-center justify-center
-              text-red-500 hover:bg-red-50 transition">
+                                <form action="{{ route('leave.reject', $leave->id) }}" method="POST"
+                                      onsubmit="return confirm('Do you reject this leave application?')"
+                                      class="w-7 h-7 cursor-pointer rounded-lg border border-red-500/20 flex items-center justify-center
+                                        text-red-500 hover:bg-red-50 transition">
+                                    @csrf
 
-                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                              d="M6 6l12 12M18 6L6 18"/>
-                                    </svg>
-                                </a>
+                                    <button type="submit">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M6 6l12 12M18 6L6 18"/>
+                                        </svg>
+                                    </button>
+                                </form>
 
                             </div>
-
+                            @endcan
                         </div>
                     </td>
 
