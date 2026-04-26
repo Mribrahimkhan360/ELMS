@@ -15,9 +15,7 @@
 
             {{-- Error Message --}}
             @if(session('error'))
-                <div class="mb-3 px-4 py-2 bg-red-100 text-red-700 text-[12.5px] rounded-lg border border-red-200">
-                    {{ session('error') }}
-                </div>
+                <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
 
         </div>

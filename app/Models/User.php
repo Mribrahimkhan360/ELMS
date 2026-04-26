@@ -48,8 +48,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function leave()
+    public function leaves()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(Leave::class);
     }
 }

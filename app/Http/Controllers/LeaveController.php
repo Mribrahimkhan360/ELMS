@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Administration;
 use App\Models\Leave;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -32,35 +33,76 @@ class LeaveController extends Controller
     /**
      * Store a newly created resource in storage.
      * @param Request $request
+     * @param Leave $leave
+     * @return
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'form_date' => 'required',
-            'to_date'   => 'required',
+            'form_date' => 'required|date',
+            'to_date'   => 'required|date|after_or_equal:form_date',
             'leave_type' => 'required',
-            'approved_at' => Carbon::now(),
             'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ]);
 
+        $start = Carbon::parse($request->form_date);
+        $end = Carbon::parse($request->to_date);
+
+        $daysDifference = $start->diffInDays($end) + 1;
+
+        $userId = Auth::id();
+
+        $admin = Administration::first();
+
+        // Sick count
+        $sickCount = User::findOrFail($userId)
+            ->leaves()
+            ->where('leave_type', 'sick')
+            ->whereIn('status', ['approved', 'pending'])
+            ->get()
+            ->sum(function ($leave) {
+                return Carbon::parse($leave->form_date)
+                        ->diffInDays(Carbon::parse($leave->to_date)) + 1;
+            });
+
+        // Casual count
+        $casualCount = User::findOrFail($userId)
+            ->leaves()
+            ->where('leave_type', 'casual')
+            ->whereIn('status', ['approved', 'pending'])
+            ->get()
+            ->sum(function ($leave) {
+                return Carbon::parse($leave->form_date)
+                        ->diffInDays(Carbon::parse($leave->to_date)) + 1;
+            });
+
+        $leaveType = $request->leave_type;
+
+        if ($leaveType === 'sick' && ($sickCount + $daysDifference) > $admin->sick) {
+            return back()->with('error', 'Sick leave limit exceeded!');
+        }
+
+        if ($leaveType === 'casual' && ($casualCount + $daysDifference) > $admin->casual) {
+            return back()->with('error', 'Casual leave limit exceeded!');
+        }
+
         $attachmentPath = null;
 
-        if ($request->hasFile('attachment'))
-        {
-            $attachmentPath = $request->file('attachment')->store('images','public');
+        if ($request->hasFile('attachment')) {
+            $attachmentPath = $request->file('attachment')->store('images', 'public');
         }
 
         Leave::create([
-            'user_id' => Auth::id(),
+            'user_id' => $userId,
             'form_date' => $request->form_date,
             'to_date' => $request->to_date,
-            'leave_type' => $request->leave_type,
-            'attachment' => $attachmentPath ?? null,
+            'leave_type' => $leaveType,
+            'attachment' => $attachmentPath,
             'status' => 'pending',
             'approved_at' => null,
         ]);
 
-        return redirect()->back()->with('success','Leave application submitted successfully!');
+        return back()->with('success', 'Leave application submitted successfully!');
     }
 
     /**
@@ -143,25 +185,44 @@ class LeaveController extends Controller
 
         $userId = $leave->user_id;
 
-        $sickCount = DB::table('leaves')
-            ->where('user_id', $userId)
-            ->where('leave_type', 'sick')
-            ->where('status', 'approved')
-            ->count();
 
-        $casualCount = DB::table('leaves')
-            ->where('user_id', $userId)
+        $sickCount = User::findOrFail($userId)
+            ->leaves()
+            ->where('leave_type', 'sick')
+            ->whereIn('status', ['approved', 'pending'])
+            ->get()
+            ->sum(function ($leave) {
+                return Carbon::parse($leave->form_date)
+                        ->diffInDays(Carbon::parse($leave->to_date)) + 1;
+            });
+//        dd($sickCount);
+
+        $casualCount = User::findOrFail($userId)
+            ->leaves()
             ->where('leave_type', 'casual')
             ->where('status', 'approved')
-            ->count();
+            ->get()
+            ->sum(function ($leave) {
+                return Carbon::parse($leave->form_date)
+                        ->diffInDays(Carbon::parse($leave->to_date)) + 1;
+            });
+//        dd($casualCount);
 
         // Sick leave check
         if ($leave->leave_type === 'sick' && $sickCount >= $admin->sick) {
+            $leave->update([
+                'status' => 'rejected',
+                'approved_at' => now(),
+            ]);
             return back()->with('error', 'Sorry, you are not eligible to take more sick leave!');
         }
 
         // Casual leave check
         if ($leave->leave_type === 'casual' && $casualCount >= $admin->casual) {
+            $leave->update([
+                'status' => 'rejected',
+                'approved_at' => now(),
+            ]);
             return back()->with('error', 'Sorry, you are not eligible to take more casual leave!');
         }
 
