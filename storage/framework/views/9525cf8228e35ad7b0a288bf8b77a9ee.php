@@ -152,55 +152,6 @@
                 </div>
             </div>
 
-            
-            <div class="space-y-3">
-                
-                <div class="bg-white rounded-xl border border-black/[0.08] overflow-hidden">
-                    <div class="px-4 py-3 border-b border-black/[0.07]">
-                        <p class="text-[13px] font-semibold text-gray-900">Summary</p>
-                    </div>
-                    <div class="divide-y divide-black/[0.05]">
-                        <div class="flex items-center justify-between px-4 py-2.5">
-                            <span class="text-[11.5px] text-gray-400">Status</span>
-                            <span class="text-[10.5px] font-semibold bg-green-100 text-green-800 px-2 py-0.5 rounded-full">Active</span>
-                        </div>
-                        <div class="flex items-center justify-between px-4 py-2.5">
-                            <span class="text-[11.5px] text-gray-400">Leave Days</span>
-                            <span class="text-[12px] font-semibold text-indigo-500" id="leave-days">—</span>
-                        </div>
-                        <div class="flex items-center justify-between px-4 py-2.5">
-                            <span class="text-[11.5px] text-gray-400">Leave Type</span>
-                            <span class="text-[12px] font-semibold text-gray-700" id="leave-type-label">—</span>
-                        </div>
-                        <div class="flex items-center justify-between px-4 py-2.5">
-                            <span class="text-[11.5px] text-gray-400">Created by</span>
-                            <span class="text-[12px] font-semibold text-gray-700"><?php echo e(auth()->user()->name); ?></span>
-                        </div>
-                    </div>
-                </div>
-
-                
-                <div class="bg-white rounded-xl border border-black/[0.08] overflow-hidden">
-                    <div class="px-4 py-3 border-b border-black/[0.07]">
-                        <p class="text-[13px] font-semibold text-gray-900">Tips</p>
-                    </div>
-                    <div class="px-4 py-3.5 space-y-2">
-                        <p class="flex items-start gap-2 text-[12px] text-gray-400 leading-relaxed">
-                            <span class="text-indigo-400 mt-0.5">•</span>
-                            Apply for leave at least 2 days in advance when possible.
-                        </p>
-                        <p class="flex items-start gap-2 text-[12px] text-gray-400 leading-relaxed">
-                            <span class="text-indigo-400 mt-0.5">•</span>
-                            Attach a medical certificate for sick leave longer than 2 days.
-                        </p>
-                        <p class="flex items-start gap-2 text-[12px] text-gray-400 leading-relaxed">
-                            <span class="text-indigo-400 mt-0.5">•</span>
-                            Write a clear reason so your manager can review quickly.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </form>
 

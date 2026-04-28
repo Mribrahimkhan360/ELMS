@@ -67,8 +67,8 @@
             {{-- Section: Main --}}
             <p class="sb-section-label">Main</p>
 
-            <a href="{{ route('dashboard') }}"
-               class="sb-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            <a href="{{ route('leave.dashboard') }}"
+               class="sb-item {{ request()->routeIs('leave.dashboard') ? 'active' : '' }}">
                 <svg class="sb-icon" viewBox="0 0 16 16" fill="none">
                     <rect x="1" y="1" width="6" height="6" rx="1.5" fill="currentColor"/>
                     <rect x="9" y="1" width="6" height="6" rx="1.5" fill="currentColor"/>

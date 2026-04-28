@@ -155,18 +155,6 @@
                                     </svg>
                                 </button>
                             </form>
-                            <a href="{{ route('leave.show',$leave->id) }}"
-                               class="w-7 h-7 rounded-lg border border-black/10 flex items-center justify-center
-                            text-gray-400 hover:bg-gray-100 transition">
-
-                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
-                                          d="M2.25 12s3.75-7.5 9.75-7.5S21.75 12 21.75 12s-3.75 7.5-9.75 7.5S2.25 12 2.25 12z"/>
-                                    <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
-                                          d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
-                                </svg>
-
-                            </a>
 
                             <div class="flex items-center gap-2">
 

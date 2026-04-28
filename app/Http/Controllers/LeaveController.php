@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Administration;
 use App\Models\Leave;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use function Laravel\Pail\all;
 
 class LeaveController extends Controller
 {
@@ -18,7 +20,13 @@ class LeaveController extends Controller
      */
     public function index()
     {
-        $leaves = Leave::all();
+        $authUser = auth()->user();
+        if (auth()->user()->hasRole(['Admin', 'Hr'])) {
+            $leaves =Leave::all();
+        }
+        else{
+            $leaves = Leave::where('user_id', $authUser->id)->get();
+        }
         return view('leave.index',compact('leaves'));
     }
 
@@ -152,10 +160,6 @@ class LeaveController extends Controller
             $attachmentPath = $request->file('attachment')->store('image');
         }
 
-
-
-
-
         // update data
         $leave->update([
             'form_date' => $request->form_date,
@@ -243,4 +247,50 @@ class LeaveController extends Controller
 
         return back()->with('success', 'Rejected successfully!');
     }
+
+    public function dashboard(Leave $leave)
+    {
+       if (auth()->user()->hasRole(['employee'])){
+           $userId = Auth::id();
+           $sickCount = User::findOrFail($userId)
+            ->leaves()
+            ->where('leave_type', 'sick')
+            ->whereIn('status', ['approved'])
+            ->get()
+            ->sum(function ($leave) {
+                return Carbon::parse($leave->form_date)
+                        ->diffInDays(Carbon::parse($leave->to_date)) + 1;
+            });
+
+           $casualCount = User::findOrFail($userId)
+               ->leaves()
+               ->where('leave_type', 'casual')
+               ->whereIn('status', ['approved'])
+               ->get()
+               ->sum(function ($leave) {
+                   return Carbon::parse($leave->form_date)
+                           ->diffInDays(Carbon::parse($leave->to_date)) + 1;
+               });
+           $hasSick = Administration::value('sick');
+           $hasSickCal = $hasSick - $sickCount;
+
+           $hasCasual = Administration::value('casual');
+           $hasCasualCal = $hasCasual - $casualCount;
+
+           //
+           $pendingCount = Leave::where('user_id', $userId)
+               ->where('status', 'pending')
+               ->count();
+
+           $approvedCount = Leave::where('user_id', $userId)
+               ->where('status', 'approved')
+               ->count();
+
+//           dd($leaveStatus->toArray());
+           return view('dashboard',compact('sickCount','casualCount','hasSickCal','hasCasualCal','pendingCount','approvedCount'));
+       }
+
+        return view('dashboard');
+    }
+
 }
