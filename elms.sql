@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 30, 2026 at 09:45 AM
+-- Generation Time: Apr 30, 2026 at 11:14 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -141,16 +141,19 @@ CREATE TABLE `leaves` (
   `approved_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `reason` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `leaves`
 --
 
-INSERT INTO `leaves` (`id`, `user_id`, `form_date`, `to_date`, `leave_type`, `attachment`, `status`, `approved_at`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(34, 5, '2026-04-01', '2026-04-01', 'sick', NULL, 'approved', '2026-04-28 04:22:35', '2026-04-28 04:22:17', '2026-04-28 04:22:35', NULL),
-(35, 4, '2026-04-01', '2026-04-01', 'casual', NULL, 'approved', '2026-04-28 04:25:01', '2026-04-28 04:24:41', '2026-04-28 04:25:01', NULL);
+INSERT INTO `leaves` (`id`, `user_id`, `form_date`, `to_date`, `leave_type`, `attachment`, `status`, `approved_at`, `created_at`, `updated_at`, `deleted_at`, `reason`) VALUES
+(34, 5, '2026-04-01', '2026-04-01', 'sick', NULL, 'approved', '2026-04-28 04:22:35', '2026-04-28 04:22:17', '2026-04-28 04:22:35', NULL, ''),
+(35, 4, '2026-04-01', '2026-04-01', 'casual', NULL, 'approved', '2026-04-28 04:25:01', '2026-04-28 04:24:41', '2026-04-28 04:25:01', NULL, ''),
+(36, 5, '2026-04-22', '2026-04-24', 'sick', NULL, 'pending', NULL, '2026-04-30 03:09:29', '2026-04-30 03:09:29', NULL, 'asdqwf'),
+(37, 5, '2026-04-30', '2026-04-30', 'sick', NULL, 'pending', NULL, '2026-04-30 03:12:18', '2026-04-30 03:12:18', NULL, 'Dear Madam,\r\n\r\nI would like to request leave from 30.04.2026 to 30.04.2026 due to family argent. I will ensure that all my responsibilities are managed before my absence.\r\n\r\nKindly grant me leave for the mentioned period.\r\n\r\nThank you for your understanding.\r\n\r\nSincerely,\r\nIbrahim Khan\r\nJunior Software Engineer');
 
 -- --------------------------------------------------------
 
@@ -340,7 +343,9 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('ApyCoOhEslK9Mv4sa1kSLowMNZOYkI1E49UymQ8p', 5, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiczZJeGhEb2RVbFd2OTV4YVBOUERmcVlTREVYYjJCenlzSkFTTFJPUCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzQ6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sZWF2ZS9jcmVhdGUiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo1O30=', 1777533208),
+('4Clm6X72FGwi8fxnrBPUk65gJsgX1knV5zQfwHw5', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoieWtpWmZKcjFROU5odHpDNjBIVlpSeHozREh5bjlzcUd2cHNNY3JURiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1777539445),
+('ApyCoOhEslK9Mv4sa1kSLowMNZOYkI1E49UymQ8p', 5, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiczZJeGhEb2RVbFd2OTV4YVBOUERmcVlTREVYYjJCenlzSkFTTFJPUCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sZWF2ZSI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjU7fQ==', 1777540342),
+('oSbPAcRX45K1mX7TT66ssPhsj4lQovdoBaAWLYoA', 5, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiTEhOd3B0MlVYaTVudndoT2d4aTBRMlFFcXRkejd4c3ptMEd0RVZsNyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjM0OiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvbGVhdmUvY3JlYXRlIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6NTt9', 1777540169),
 ('Ouk81TBWPPkyCKbNNIDHmuBruzuhdxfpQJ8juIod', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoidHMyR3ZPV0hHSGxEMGc0T0djZldOS09wSzFEZDZpUGxDR2hYSGlObSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1777533355);
 
 -- --------------------------------------------------------
@@ -516,7 +521,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `leaves`
 --
 ALTER TABLE `leaves`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -569,13 +574,6 @@ ALTER TABLE `model_has_permissions`
 --
 ALTER TABLE `model_has_roles`
   ADD CONSTRAINT `model_has_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `role_has_permissions`
---
-ALTER TABLE `role_has_permissions`
-  ADD CONSTRAINT `role_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `role_has_permissions_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

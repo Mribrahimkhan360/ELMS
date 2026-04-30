@@ -50,6 +50,7 @@ class LeaveController extends Controller
             'form_date' => 'required|date',
             'to_date'   => 'required|date|after_or_equal:form_date',
             'leave_type' => 'required',
+            'reason' => 'required|string',
             'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ]);
 
@@ -105,6 +106,7 @@ class LeaveController extends Controller
             'form_date' => $request->form_date,
             'to_date' => $request->to_date,
             'leave_type' => $leaveType,
+            'reason' => $request->reason,
             'attachment' => $attachmentPath,
             'status' => 'pending',
             'approved_at' => null,
