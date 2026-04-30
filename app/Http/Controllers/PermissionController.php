@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
 
@@ -22,7 +23,8 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        return view('permissions.create');
+        $userCount = User::count();
+        return view('permissions.create',compact('userCount'));
     }
 
     /**

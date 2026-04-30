@@ -29,7 +29,6 @@
 <?php $component = $__componentOriginal7c1bf3a9346f208f66ee83b06b607fb5; ?>
 <?php unset($__componentOriginal7c1bf3a9346f208f66ee83b06b607fb5); ?>
 <?php endif; ?>
-
     <form method="POST" action="<?php echo e(route('login')); ?>">
         <?php echo csrf_field(); ?>
 

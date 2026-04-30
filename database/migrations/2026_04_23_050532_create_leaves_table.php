@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->date('form_date');
             $table->date('to_date');
+            $table->string('reason');
             $table->enum('leave_type',['sick','casual']);
             $table->string('attachment')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');

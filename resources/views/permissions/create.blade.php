@@ -33,12 +33,16 @@
                             <label class="block text-[11.5px] font-semibold text-gray-500 mb-1.5">
                                 Permission Name <span class="text-red-400">*</span>
                             </label>
-                            <input type="text" name="name" value="{{ old('name') }}"
-                                   placeholder="e.g. HR Manager"
-                                   class="w-full bg-[#f9f9fb] border border-black/10 rounded-lg px-3 py-2
-                                          text-[12.5px] text-gray-900 placeholder-gray-300
-                                          focus:outline-none focus:ring-2 focus:ring-indigo-400/20
-                                          focus:border-indigo-400 focus:bg-white transition border-red-400">
+                            <input
+                                type="text"
+                                name="name"
+                                value="{{ old('name') }}"
+                                placeholder="e.g. HR Manager"
+                                class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 shadow-sm
+                                        transition duration-200 ease-in-out
+                                        focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100 focus:outline-none
+                                        hover:border-gray-300"
+                            />
                             <input type="hidden" name="guard_name" value="web">
                         </div>
                     </div>
@@ -102,15 +106,17 @@
                         </div>
                         <div class="flex items-center justify-between px-4 py-2.5">
                             <span class="text-[11.5px] text-gray-400">Permissions selected</span>
-                            <span class="text-[12px] font-semibold text-indigo-500" id="perm-count">0</span>
+                            <span class="text-[12px] font-semibold text-indigo-500" id="perm-count">
+                                0
+                            </span>
                         </div>
                         <div class="flex items-center justify-between px-4 py-2.5">
                             <span class="text-[11.5px] text-gray-400">Assigned users</span>
-                            <span class="text-[12px] font-semibold text-gray-700">0</span>
+                            <span class="text-[12px] font-semibold text-gray-700"> {{ $userCount }}</span>
                         </div>
                         <div class="flex items-center justify-between px-4 py-2.5">
                             <span class="text-[11.5px] text-gray-400">Created by</span>
-                            <span class="text-[12px] font-semibold text-gray-700">ahhh yy</span>
+                            <span class="text-[12px] font-semibold text-gray-700">{{ auth()->user()->name }}</span>
                         </div>
                     </div>
                 </div>

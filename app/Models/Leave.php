@@ -15,6 +15,7 @@ class Leave extends Model
         'leave_type',
         'attachment',
         'status',
+        'reason',
         'approved_at',
     ];
 
