@@ -2,7 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+<<<<<<< HEAD
 @import "tailwindcss";
+=======
+
+>>>>>>> c071558 (api)
 
 /* ── Reset & Base ─────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
@@ -317,6 +321,7 @@ body { animation: pageIn 180ms ease both; }
     .topbar-search { max-width: 150px; }
 }
 
+<<<<<<< HEAD
 /*
 ===========================
 ===========================
@@ -326,5 +331,7 @@ body { animation: pageIn 180ms ease both; }
 ===========================
 ===========================
 */
+=======
+>>>>>>> c071558 (api)
 
 
